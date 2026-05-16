@@ -311,7 +311,20 @@ public class LoaderTask implements Runnable {
         } finally {
             Trace.endSection();
         }
-        logASplit("loadAllApps finished");
+       logASplit("loadAllApps finished");
+
+        // --- HAPTIX OS: MEVCUT TÜM UYGULAMALARI ANA EKRANA DÖK ---
+        verifyNotStopped();
+        synchronized (mBgDataModel) {
+            for (AppInfo app : mBgAllAppsList.data) {
+                // Eğer uygulama zaten Workspace'te (ana ekranda) yoksa ekle
+                if (!mBgDataModel.isItemInWorkspaceOrFolder(app)) {
+                    ItemInstallQueue.INSTANCE.get(mContext)
+                        .queueItem(app.makeWorkspaceItem(mContext), app.user);
+                }
+            }
+        }
+        // --- HAPTIX OS SONU ---
 
         verifyNotStopped();
         mLauncherBinder.bindAllApps();
