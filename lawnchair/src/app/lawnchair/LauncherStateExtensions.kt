@@ -5,7 +5,7 @@ import com.android.launcher3.Launcher
 import com.android.launcher3.LauncherState
 import com.android.launcher3.anim.AnimatorListeners.forEndCallback
 import com.android.launcher3.states.StateAnimationConfig
-import com.android.launcher3.touch.AllAppsSwipeController
+// import com.android.launcher3.touch.AllAppsSwipeController
 import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
 
