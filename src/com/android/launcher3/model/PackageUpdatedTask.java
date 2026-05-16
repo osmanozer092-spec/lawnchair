@@ -132,18 +132,23 @@ public class PackageUpdatedTask implements ModelUpdateTask {
                     + ", user=" + mUser);
         }
         switch (mOp) {
-            case OP_ADD: {
+case OP_ADD: {
                 for (int i = 0; i < packageCount; i++) {
                     iconCache.updateIconsForPkg(packages[i], mUser);
                     if (FeatureFlags.PROMISE_APPS_IN_ALL_APPS.get()) {
-                        if (DEBUG) {
-                            Log.d(TAG, "OP_ADD: PROMISE_APPS_IN_ALL_APPS enabled:"
-                                    + " removing promise icon apps from package=" + packages[i]);
-                        }
                         appsList.removePackage(packages[i], mUser);
                     }
-                    activitiesLists.put(packages[i],
-                            appsList.addPackage(context, packages[i], mUser));
+                    
+                    // Uygulamayı çekmece listesine ekle (Mevcut kod)
+                    List<LauncherActivityInfo> activities = appsList.addPackage(context, packages[i], mUser);
+                    activitiesLists.put(packages[i], activities);
+
+                    // --- HAPTIX OS EKLEMESİ BAŞLANGIÇ ---
+                    // Yeni yüklenen her uygulamayı otomatik olarak Ana Ekrana (Workspace) gönderir
+                    for (LauncherActivityInfo lai : activities) {
+                        ItemInstallQueue.INSTANCE.get(context).queueItem(lai, mUser);
+                    }
+                    // --- HAPTIX OS EKLEMESİ BİTİŞ ---
                 }
                 flagOp = FlagOp.NO_OP.removeFlag(WorkspaceItemInfo.FLAG_DISABLED_NOT_AVAILABLE);
                 break;
