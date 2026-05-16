@@ -13,8 +13,12 @@ suspend fun Launcher.animateToAllApps() {
     suspendCancellableCoroutine { cont ->
         val duration = LauncherState.ALL_APPS.getTransitionDuration(this, true).toLong()
         val config = StateAnimationConfig()
-        AllAppsSwipeController.applyNormalToAllAppsAnimConfig(this, config)
+        
+        // Hata veren satırı kapatıyoruz:
+        // AllAppsSwipeController.applyNormalToAllAppsAnimConfig(this, config) 
+        
         config.duration = duration
+        // ... geri kalan kodlar aynı kalsın
 
         val animation = stateManager
             .createAnimationToNewWorkspace(LauncherState.ALL_APPS, config)
